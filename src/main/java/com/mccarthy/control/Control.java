@@ -37,17 +37,6 @@ public class Control {
         SimpleMatrix U = null;
         SimpleEVD<SimpleMatrix> sEvd = S.eig();
         List<Complex_F64> EiganValues = sEvd.getEigenvalues();
-        // for (Complex_F64 c : EiganValues) {
-        // double tmp = c.real;
-        // System.out.println(tmp);
-        // if (tmp < 0) {
-        // tmp = tmp * -1;
-        // }
-        // if (!(tmp < 1)) {
-        // throw new UnableToEvaluateStateSolution("The system has eiganvalues on the
-        // unit circle.");
-        // }
-        // }
         EiganValues.sort(new Comparator<Complex_F64>() {
 
             @Override
@@ -59,6 +48,15 @@ public class Control {
                 return 0;
             }
         });
+        for (int i = 0; i < EiganValues.size() / 2; i++) {
+            double tmp = EiganValues.get(i).real;
+            if (tmp < 0) {
+                tmp = tmp * -1;
+            }
+            if (!(tmp < 1)) {
+                throw new UnableToEvaluateStateSolution("The system has eiganvalues on the unit circle.");
+            }
+        }
         for (int i = 0; i < sEvd.getNumberOfEigenvalues(); i++) {
             int place = 0;
             for (Complex_F64 c : sEvd.getEigenvalues()) {
