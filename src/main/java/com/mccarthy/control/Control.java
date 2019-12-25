@@ -11,6 +11,10 @@ public class Control {
     private Control() {
     }
 
+    public static Complex_F64[] pole(ss sys){
+        return (Complex_F64[]) sys._A.eig().getEigenvalues().toArray();
+    }
+
     public static StateSolution lqr(ss sys, SimpleMatrix Q, SimpleMatrix R) throws UnableToEvaluateStateSolution {
         return care(sys._A, sys._B, Q, R);
     }
