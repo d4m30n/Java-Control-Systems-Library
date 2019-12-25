@@ -15,23 +15,16 @@ public class Control {
         return (Complex_F64[]) sys._A.eig().getEigenvalues().toArray();
     }
 
+    /**
+     * 
+     * @param sys
+     * @param Q
+     * @param R
+     * @return
+     * @throws UnableToEvaluateStateSolution
+     */
     public static StateSolution lqr(ss sys, SimpleMatrix Q, SimpleMatrix R) throws UnableToEvaluateStateSolution {
         return care(sys._A, sys._B, Q, R);
-    }
-
-    /**
-     * Find the state space solution K, S and E
-     * 
-     * @param A - A matrix
-     * @param B - B matrix
-     * @param Q - Q matrix
-     * @param R - R matrix
-     * @return StateSolution class containing K gain matrix, S riccati solution and
-     *         E eiganvalues of control system
-     */
-    public static StateSolution lqr(SimpleMatrix A, SimpleMatrix B, SimpleMatrix Q, SimpleMatrix R)
-            throws UnableToEvaluateStateSolution {
-        return care(A, B, Q, R);
     }
 
     public static StateSolution dare(SimpleMatrix A, SimpleMatrix B, SimpleMatrix Q, SimpleMatrix R)
@@ -89,6 +82,15 @@ public class Control {
         return new StateSolution(K, P, E);
     }
 
+    /**
+     * 
+     * @param A - The system matrix
+     * @param B - The input matrix
+     * @param Q
+     * @param R
+     * @return
+     * @throws UnableToEvaluateStateSolution
+     */
     public static StateSolution care(SimpleMatrix A, SimpleMatrix B, SimpleMatrix Q, SimpleMatrix R)
             throws UnableToEvaluateStateSolution {
         isSystemValid(A, B, Q, R);
@@ -140,7 +142,13 @@ public class Control {
         return new StateSolution(K, P, E);
     }
 
+    /**
+     * Gets an identity matrix given a size must be greater than 0
+     * @param size - The size of the identity matrix
+     * @return - An identiry matrix
+     */
     public static SimpleMatrix eye(int size) {
+        if(size < 0) throw new InvalidSizeException("The size of the identity matrix must be greater than 0.");
         return SimpleMatrix.identity(size);
     }
 
