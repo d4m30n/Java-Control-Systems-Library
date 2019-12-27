@@ -77,23 +77,23 @@ public class TestControl {
     }
 
     private void validateSolutions(StateSolution ss, SimpleMatrix K, SimpleMatrix S, Complex_F64[] E) {
-        assertEquals(K.numCols(), ss.GetK().numCols());
-        assertEquals(K.numRows(), ss.GetK().numRows());
-        assertEquals(S.numCols(), ss.GetS().numCols());
-        assertEquals(S.numRows(), ss.GetS().numRows());
-        assertEquals(E.length, ss.GetE().length);
+        assertEquals(K.numCols(), ss.getK().numCols());
+        assertEquals(K.numRows(), ss.getK().numRows());
+        assertEquals(S.numCols(), ss.getS().numCols());
+        assertEquals(S.numRows(), ss.getS().numRows());
+        assertEquals(E.length, ss.getE().length);
         for (int i = 0; i < K.numCols(); i++) {
             for (int j = 0; j < K.numRows(); j++) {
-                assertEquals(K.get(j, i), ss.GetK().get(j, i), 0.00000001);
+                assertEquals(K.get(j, i), ss.getK().get(j, i), 0.00000001);
             }
         }
         for (int i = 0; i < S.numCols(); i++) {
             for (int j = 0; j < S.numRows(); j++) {
-                assertEquals(S.get(j, i), ss.GetS().get(j, i), 0.00000001);
+                assertEquals(S.get(j, i), ss.getS().get(j, i), 0.00000001);
             }
         }
         for (int i = 0; i < E.length; i++) {
-            assertEquals(E[i].real, ss.GetE()[i].real, 0.0000001);
+            assertEquals(E[i].real, ss.getE()[i].real, 0.0000001);
         }
     }
 

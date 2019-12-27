@@ -14,15 +14,15 @@ public class StateSolution {
         _E = E;
     }
 
-    public SimpleMatrix GetK() {
+    public SimpleMatrix getK() {
         return _K.copy();
     }
 
-    public SimpleMatrix GetS() {
+    public SimpleMatrix getS() {
         return _S.copy();
     }
 
-    public Complex_F64[] GetE() {
+    public Complex_F64[] getE() {
         return _E.clone();
     }
 }
