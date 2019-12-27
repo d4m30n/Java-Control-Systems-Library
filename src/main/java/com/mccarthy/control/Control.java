@@ -11,7 +11,7 @@ public class Control {
     private Control() {
     }
 
-    public static Complex_F64[] pole(ss sys){
+    public static Complex_F64[] pole(ss sys) {
         return (Complex_F64[]) sys._A.eig().getEigenvalues().toArray();
     }
 
@@ -82,13 +82,16 @@ public class Control {
     }
 
     /**
+     * Solves the continues riccati equation using eiganvector decomposition
      * 
      * @param A - The system matrix
      * @param B - The input matrix
-     * @param Q
-     * @param R
-     * @return
-     * @throws UnableToEvaluateStateSolution
+     * @param Q - The state cost weighted matrix
+     * @param R - The control weighted matrix
+     * @return - The solution to the continues time riccatti equation along with the
+     *         system gain matrix K
+     * @throws UnableToEvaluateStateSolution - The system is unable to be evaluated
+     *                                       if there a values on the imaginary axis
      */
     public static StateSolution care(SimpleMatrix A, SimpleMatrix B, SimpleMatrix Q, SimpleMatrix R)
             throws UnableToEvaluateStateSolution {
@@ -142,11 +145,13 @@ public class Control {
 
     /**
      * Gets an identity matrix given a size must be greater than 0
+     * 
      * @param size - The size of the identity matrix
      * @return - An identiry matrix
      */
     public static SimpleMatrix eye(int size) {
-        if(size < 0) throw new InvalidSizeException("The size of the identity matrix must be greater than 0.");
+        if (size < 0)
+            throw new InvalidSizeException("The size of the identity matrix must be greater than 0.");
         return SimpleMatrix.identity(size);
     }
 
