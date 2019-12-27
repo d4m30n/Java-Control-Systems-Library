@@ -1,13 +1,14 @@
 package com.mccarthy.control;
 
 import org.ejml.simple.SimpleMatrix;
+import org.ejml.data.Complex_F64;
 
 public class StateSolution {
     private SimpleMatrix _K;
     private SimpleMatrix _S;
-    private SimpleMatrix _E;
+    private Complex_F64[] _E;
 
-    public StateSolution(SimpleMatrix K, SimpleMatrix S, SimpleMatrix E) {
+    public StateSolution(SimpleMatrix K, SimpleMatrix S, Complex_F64[] E) {
         _K = K;
         _S = S;
         _E = E;
@@ -21,7 +22,7 @@ public class StateSolution {
         return _S.copy();
     }
 
-    public SimpleMatrix GetE() {
-        return _E.copy();
+    public Complex_F64[] GetE() {
+        return _E.clone();
     }
 }

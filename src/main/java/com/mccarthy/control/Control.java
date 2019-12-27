@@ -72,12 +72,11 @@ public class Control {
         int col = U.numCols();
         SimpleMatrix U11 = U.extractMatrix(0, row / 2, 0, col / 2);
         SimpleMatrix U21 = U.extractMatrix(row / 2, row, 0, col / 2);
-        double[][] tmp = new double[1][sEvd.getNumberOfEigenvalues() / 2];
+        Complex_F64[] E = new Complex_F64[sEvd.getNumberOfEigenvalues() / 2];
         for (int i = 0; i < sEvd.getNumberOfEigenvalues() / 2; i++) {
-            tmp[0][i] = EiganValues.get(i).real;
+            E[i] = EiganValues.get(i);
         }
         SimpleMatrix P = U21.mult(U11.invert());
-        SimpleMatrix E = new SimpleMatrix(tmp);
         SimpleMatrix K = R.plus(B.transpose().mult(P.mult(B))).invert().mult(B.transpose().mult(P.mult(A)));
         return new StateSolution(K, P, E);
     }
@@ -132,12 +131,11 @@ public class Control {
         int col = U.numCols();
         SimpleMatrix U11 = U.extractMatrix(0, row / 2, 0, col / 2);
         SimpleMatrix U21 = U.extractMatrix(row / 2, row, 0, col / 2);
-        double[][] tmp = new double[1][hEvd.getNumberOfEigenvalues() / 2];
+        Complex_F64[] E = new Complex_F64[hEvd.getNumberOfEigenvalues() / 2];
         for (int i = 0; i < hEvd.getNumberOfEigenvalues() / 2; i++) {
-            tmp[0][i] = EiganValues.get(i).real;
+            E[i] = EiganValues.get(i);
         }
         SimpleMatrix P = U21.mult(U11.invert());
-        SimpleMatrix E = new SimpleMatrix(tmp);
         SimpleMatrix K = R.invert().mult(B.transpose().mult(P));
         return new StateSolution(K, P, E);
     }

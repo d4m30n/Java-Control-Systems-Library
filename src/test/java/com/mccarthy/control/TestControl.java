@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import org.ejml.simple.SimpleMatrix;
+import org.ejml.data.Complex_F64;
 import org.junit.Test;
 
 public class TestControl {
@@ -57,10 +58,12 @@ public class TestControl {
         createSystem();
         double[][] ssolution = { { 0.96930845, -0.22590614 }, { -0.22590614, 1.10011044 } };
         double[][] ksolution = { { 0.00656839, 0.41745356 }, { 0.08090862, 0.50487399 }, { 0.15524885, 0.59229442 } };
-        double[][] esolution = { { -0.97965974, -0.45854855 } };
+        double[] esolution = { -0.97965974, -0.45854855 };
         SimpleMatrix S = new SimpleMatrix(ssolution);
         SimpleMatrix K = new SimpleMatrix(ksolution);
-        SimpleMatrix E = new SimpleMatrix(esolution);
+        Complex_F64[] E = new Complex_F64[2];
+        E[0] = new Complex_F64(esolution[0], 0d);
+        E[1] = new Complex_F64(esolution[1], 0d);
         try {
             StateSolution ss = Control.care(A, B, Q, R);
             validateSolutions(ss, K, S, E);
@@ -73,13 +76,12 @@ public class TestControl {
         }
     }
 
-    private void validateSolutions(StateSolution ss, SimpleMatrix K, SimpleMatrix S, SimpleMatrix E) {
+    private void validateSolutions(StateSolution ss, SimpleMatrix K, SimpleMatrix S, Complex_F64[] E) {
         assertEquals(K.numCols(), ss.GetK().numCols());
         assertEquals(K.numRows(), ss.GetK().numRows());
         assertEquals(S.numCols(), ss.GetS().numCols());
         assertEquals(S.numRows(), ss.GetS().numRows());
-        assertEquals(E.numCols(), ss.GetE().numCols());
-        assertEquals(E.numRows(), ss.GetE().numRows());
+        assertEquals(E.length, ss.GetE().length);
         for (int i = 0; i < K.numCols(); i++) {
             for (int j = 0; j < K.numRows(); j++) {
                 assertEquals(K.get(j, i), ss.GetK().get(j, i), 0.00000001);
@@ -90,10 +92,8 @@ public class TestControl {
                 assertEquals(S.get(j, i), ss.GetS().get(j, i), 0.00000001);
             }
         }
-        for (int i = 0; i < E.numCols(); i++) {
-            for (int j = 0; j < E.numRows(); j++) {
-                assertEquals(E.get(j, i), ss.GetE().get(j, i), 0.0000001);
-            }
+        for (int i = 0; i < E.length; i++) {
+            assertEquals(E[i].real, ss.GetE()[i].real, 0.0000001);
         }
     }
 
@@ -103,10 +103,12 @@ public class TestControl {
         double[][] ksolution = { { -0.01498429, -0.02211717 }, { -0.06273946, -0.02600792 },
                 { -0.11049463, -0.02989867 } };
         double[][] ssolution = { { 1.293394, -0.01092363 }, { -0.01092363, 1.00607547 } };
-        double[][] esolution = { { -0.0559309, -0.45708437 } };
+        double[] esolution = { -0.0559309, -0.45708437 };
         SimpleMatrix K = new SimpleMatrix(ksolution);
         SimpleMatrix S = new SimpleMatrix(ssolution);
-        SimpleMatrix E = new SimpleMatrix(esolution);
+        Complex_F64[] E = new Complex_F64[2];
+        E[0] = new Complex_F64(esolution[0], 0d);
+        E[1] = new Complex_F64(esolution[1], 0d);
         try {
             StateSolution ss = Control.dare(A, B, Q, R);
             validateSolutions(ss, K, S, E);
