@@ -1,12 +1,13 @@
 package com.mccarthy.control;
 
+import org.ejml.data.Complex_F64;
 import org.ejml.simple.SimpleMatrix;
 
-public class ss {
-    protected SimpleMatrix _A;
-    protected SimpleMatrix _B;
-    protected SimpleMatrix _C;
-    protected SimpleMatrix _D;
+public class SS {
+    protected final SimpleMatrix _A;
+    protected final SimpleMatrix _B;
+    protected final SimpleMatrix _C;
+    protected final SimpleMatrix _D;
 
     protected double _dt = -1; // Discrete Time state space
 
@@ -18,7 +19,7 @@ public class ss {
      * @param C - The output matrix
      * @param D - The feedthrough (or feedforward) matrix
      */
-    public ss(SimpleMatrix A, SimpleMatrix B, SimpleMatrix C, SimpleMatrix D) {
+    public SS(SimpleMatrix A, SimpleMatrix B, SimpleMatrix C, SimpleMatrix D) {
         isSystemValid(A, B, C, D);
         _A = A;
         _B = B;
@@ -35,7 +36,7 @@ public class ss {
      * @param D  - The feedthrough (or feedforward) matrix
      * @param dt - The descret time
      */
-    public ss(SimpleMatrix A, SimpleMatrix B, SimpleMatrix C, SimpleMatrix D, double dt) {
+    public SS(SimpleMatrix A, SimpleMatrix B, SimpleMatrix C, SimpleMatrix D, double dt) {
         this(A, B, C, D);
         _dt = dt;
     }
@@ -85,6 +86,16 @@ public class ss {
     public SimpleMatrix getOutputVector(SimpleMatrix x, SimpleMatrix u) {
         isSystemValid(x, u);
         return _C.mult(x).plus(_D.mult(u));
+    }
+
+    /**
+     * Given a system the eiganvalues of that system are returned
+     * 
+     * @param sys - The system
+     * @return - The eiganvalues of the system
+     */
+    public Complex_F64[] pole() {
+        return (Complex_F64[]) _A.eig().getEigenvalues().toArray();
     }
 
     public SimpleMatrix copyA() {
