@@ -34,26 +34,6 @@ public class TestControl {
     }
 
     @Test
-    public void testEye() {
-        for (int size = 1; size < 5; size++) {
-            SimpleMatrix testeye = Control.eye(size);
-            assertEquals(size, testeye.numRows());
-            assertEquals(size, testeye.numCols());
-            int place = 0;
-            for (int i = 0; i < testeye.numRows(); i++) {
-                for (int j = 0; j < testeye.numCols(); j++) {
-                    if (j == place && i == place) {
-                        assertEquals(1, testeye.get(i, j), .01);
-                        place++;
-                    } else {
-                        assertEquals(0, testeye.get(i, j), 0.01);
-                    }
-                }
-            }
-        }
-    }
-
-    @Test
     public void testCare() {
         createSystem();
         double[][] ssolution = { { 0.96930845, -0.22590614 }, { -0.22590614, 1.10011044 } };
@@ -65,11 +45,11 @@ public class TestControl {
         E[0] = new Complex_F64(esolution[0], 0d);
         E[1] = new Complex_F64(esolution[1], 0d);
         try {
-            StateSolution ss = Control.care(A, B, Q, R);
-            validateSolutions(ss, K, S, E);
-            ss sys = new ss(A, B, C, D);
-            ss = Control.lqr(sys, Q, R);
-            validateSolutions(ss, K, S, E);
+            SS sys = new SS(A, B, C, D);
+            Care care = new Care(sys, Q, R);
+            validateSolutions(care, K, S, E);
+            LQR lqr = new LQR(sys, Q, R);
+            validateSolutions(lqr, K, S, E);
 
         } catch (UnableToEvaluateStateSolution utess) {
             fail("Unable to evaluate the state solution");
@@ -110,8 +90,9 @@ public class TestControl {
         E[0] = new Complex_F64(esolution[0], 0d);
         E[1] = new Complex_F64(esolution[1], 0d);
         try {
-            StateSolution ss = Control.dare(A, B, Q, R);
-            validateSolutions(ss, K, S, E);
+            SS sys = new SS(A, B, C, D);
+            Dare dare = new Dare(sys, Q, R);
+            validateSolutions(dare, K, S, E);
 
         } catch (UnableToEvaluateStateSolution e) {
             fail("Unable to evaluate the system");
