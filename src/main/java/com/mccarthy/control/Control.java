@@ -11,22 +11,38 @@ public class Control {
     private Control() {
     }
 
+    /**
+     * Given a system the eiganvalues of that system are returned
+     * 
+     * @param sys - The system
+     * @return - The eiganvalues of the system
+     */
     public static Complex_F64[] pole(ss sys) {
         return (Complex_F64[]) sys._A.eig().getEigenvalues().toArray();
     }
 
     /**
      * 
-     * @param sys
-     * @param Q
-     * @param R
-     * @return
-     * @throws UnableToEvaluateStateSolution
+     * @param sys - The system to evaluate
+     * @param Q   - The state cost weighted matrix
+     * @param R   - The control weighted matrix
+     * @return - The state solution with K, S and E
+     * @throws UnableToEvaluateStateSolution - If the system has no solution
      */
     public static StateSolution lqr(ss sys, SimpleMatrix Q, SimpleMatrix R) throws UnableToEvaluateStateSolution {
         return care(sys._A, sys._B, Q, R);
     }
 
+    /**
+     * Evaluates the descret algebraic riccati equation
+     * 
+     * @param A - The system matrix
+     * @param B - The control matrix
+     * @param Q - The state cost weighted matrix
+     * @param R - The control weighted matrix
+     * @return - The state solution with K, S and E
+     * @throws UnableToEvaluateStateSolution - If the system has no solution
+     */
     public static StateSolution dare(SimpleMatrix A, SimpleMatrix B, SimpleMatrix Q, SimpleMatrix R)
             throws UnableToEvaluateStateSolution {
         isSystemValid(A, B, Q, R);
@@ -85,7 +101,7 @@ public class Control {
      * Solves the continues riccati equation using eiganvector decomposition
      * 
      * @param A - The system matrix
-     * @param B - The input matrix
+     * @param B - The control matrix
      * @param Q - The state cost weighted matrix
      * @param R - The control weighted matrix
      * @return - The solution to the continues time riccatti equation along with the
@@ -155,6 +171,14 @@ public class Control {
         return SimpleMatrix.identity(size);
     }
 
+    /**
+     * Checks if the given system is valid
+     * 
+     * @param A - The system matrix
+     * @param B - The control matrix
+     * @param Q - The state cost matrix
+     * @param R - The input cost matrix
+     */
     private static void isSystemValid(SimpleMatrix A, SimpleMatrix B, SimpleMatrix Q, SimpleMatrix R) {
         if (A.numCols() != Q.numCols() || A.numRows() != Q.numRows()) {
             throw new InvalidSystemException("Q and A must be of the same dimentions.");
