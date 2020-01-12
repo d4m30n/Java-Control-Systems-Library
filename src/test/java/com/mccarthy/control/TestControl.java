@@ -36,16 +36,67 @@ public class TestControl {
     @Test
     public void testCare() {
         createSystem();
+
+        testCareOne();
+        testCareTwo();
+    }
+
+    private void testCareOne() {
+        double[][] a = { { -0.5, 0 }, { 0, -0.1 } };
+        double[][] b = { { 0.1, 0.2, 0.3 }, { 0.4, 0.5, 0.6 } };
+        double[][] c = { { 1, 0 }, { 0, 1 } };
+        double[][] d = { { 0, 0, 0 }, { 0, 0, 0 } };
+        double[][] r = { { 1, 0, 0 }, { 0, 1, 0 }, { 0, 0, 1 } };
+        double[][] q = { { 1, 0 }, { 0, 1 } };
+        SimpleMatrix A = new SimpleMatrix(a);
+        SimpleMatrix B = new SimpleMatrix(b);
+        SimpleMatrix C = new SimpleMatrix(c);
+        SimpleMatrix D = new SimpleMatrix(d);
+        SimpleMatrix R = new SimpleMatrix(r);
+        SimpleMatrix Q = new SimpleMatrix(q);
+        SS sys = new SS(A, B, C, D);
+
         double[][] ssolution = { { 0.96930845, -0.22590614 }, { -0.22590614, 1.10011044 } };
         double[][] ksolution = { { 0.00656839, 0.41745356 }, { 0.08090862, 0.50487399 }, { 0.15524885, 0.59229442 } };
         double[] esolution = { -0.97965974, -0.45854855 };
         SimpleMatrix S = new SimpleMatrix(ssolution);
         SimpleMatrix K = new SimpleMatrix(ksolution);
-        Complex_F64[] E = new Complex_F64[2];
-        E[0] = new Complex_F64(esolution[0], 0d);
-        E[1] = new Complex_F64(esolution[1], 0d);
+        Complex_F64[] E = { new Complex_F64(esolution[0], 0d), new Complex_F64(esolution[1], 0d) };
+
         try {
-            SS sys = new SS(A, B, C, D);
+            Care care = new Care(sys, Q, R);
+            validateSolutions(care, K, S, E);
+            LQR lqr = new LQR(sys, Q, R);
+            validateSolutions(lqr, K, S, E);
+
+        } catch (UnableToEvaluateStateSolution utess) {
+            fail("Unable to evaluate the state solution");
+        }
+    }
+
+    private void testCareTwo() {
+        double[][] a = { { -0.5, 0 }, { 0, -0.1 } };
+        double[][] b = { { 0.7, 0.8, 0.9 }, { 0.4, 0.5, 0.6 } };
+        double[][] c = { { 1, 0 }, { 0, 1 } };
+        double[][] d = { { 0, 0, 0 }, { 0, 0, 0 } };
+        double[][] r = { { 1, 0, 0 }, { 0, 1, 0 }, { 0, 0, 4 } };
+        double[][] q = { { 5, 0 }, { 0, 3 } };
+        SimpleMatrix A = new SimpleMatrix(a);
+        SimpleMatrix B = new SimpleMatrix(b);
+        SimpleMatrix C = new SimpleMatrix(c);
+        SimpleMatrix D = new SimpleMatrix(d);
+        SimpleMatrix R = new SimpleMatrix(r);
+        SimpleMatrix Q = new SimpleMatrix(q);
+        SS sys = new SS(A, B, C, D);
+
+        double[][] ssolution = { { 3.01005001, -2.92989202 }, { -2.92989202, 6.59071229 } };
+        double[][] ksolution = { { 0.9350782, 0.5853605 }, { 0.943094, 0.95144253 }, { 0.23777745, 0.32938114 } };
+        double[] esolution = { -2.892366, -0.23815784 };
+        SimpleMatrix S = new SimpleMatrix(ssolution);
+        SimpleMatrix K = new SimpleMatrix(ksolution);
+        Complex_F64[] E = { new Complex_F64(esolution[0], 0d), new Complex_F64(esolution[1], 0d) };
+
+        try {
             Care care = new Care(sys, Q, R);
             validateSolutions(care, K, S, E);
             LQR lqr = new LQR(sys, Q, R);
