@@ -1,10 +1,10 @@
 # Java Linear Control Library
 
-This library was designed as a project that required the ability to implement a Linear Quadratic Regulator in Java, however, to my knowledge there is no existing library that can evaluate an LQR controller in Java. The main focused for this library is to implement basic functions that are used in similar libraries such as the Python Control Systems Library by implementing the basic functions of implementing and validating a system along with the evaluation of the gain matrix *K*. Currently this library is a rough draft and may be missing many other functions that are required by a control library such a pole placement and a number of system stability functions.
+This library was designed as a project that required the ability to implement a Linear Quadratic Regulator in Java, however, to my knowledge there is no existing library that can evaluate an LQR controller in Java. The main focused for this library is to implement basic functions that are used in similar libraries such as the [Python Control Systems Library](https://python-control.readthedocs.io/en/0.8.3/) by implementing the basic functions of implementing and validating a system along with the evaluation of the gain matrix *K*. Currently this library is a rough draft and may be missing many other functions that are required by a control library such a pole placement and a number of system stability functions.
 
 ## Library Usage
 
-This library to keep things simple utilises the Efficient Java Matrix Library (EJML) as a way of managing the matrix equations and layouts, a lot of the results are also given using the EJML’s `SimpleMatrix` class. 
+This library to keep things simple utilises the [Efficient Java Matrix Library](http://ejml.org/wiki/index.php?title=Main_Page) (EJML) as a way of managing the matrix equations and layouts, a lot of the results are also given using the EJML’s `SimpleMatrix` class. 
 
 ### Creating and Evaluating a System
 
